@@ -155,7 +155,7 @@
       background-color: #b28dff;
       color: white;
       text-align: center;
-      padding: 15px;
+      padding: 20px 0;
       font-size: 0.95rem;
       box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
     }
@@ -164,16 +164,33 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 15px;
+    }
+
+    .footer-logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .footer-logo {
       height: 50px;
+      width: auto;
     }
 
+    .footer-text p {
+      margin: 5px 0;
+      font-size: 1.1rem;
+      color: #f3f3f3;
+    }
 
-    h1 {
-      color: #333;
+    .footer-text p:last-child {
+      font-size: 1rem;
+      color: #d4d4d4;
+    }
+
+    .footer-text p:first-child {
+      font-weight: bold;
     }
 
     .shapes, .targets {
@@ -255,7 +272,7 @@
     <h1>Formando Formas - Formas Geométricas</h1>
     <nav>
       <a href="index.html">Página Inicial</a>
-    <a href="jogos.html">Jogos</a>
+      <a href="jogos.html">Jogos</a>
       <a href="sobrenos.html">Sobre Nós</a>
     </nav>
   </header>
@@ -296,8 +313,13 @@
 
   <footer>
     <div class="footer-content">
-      <img src="logo.png" alt="Logo do IFPE" class="footer-logo">
-      <div>| 2025 Formando Formas - Projeto da disciplina de Práticas Curriculares de Extensão l |</div>
+      <div class="footer-logo-container">
+        <img src="logo.png" alt="Logo do IFPE" class="footer-logo">
+      </div>
+      <div class="footer-text">
+        <p>Projeto da disciplina de Práticas Curriculares de Extensão l</p>
+        <p>&copy; 2025 Formando Formas</p>
+      </div>
     </div>
   </footer>
 
@@ -309,7 +331,7 @@
     }
   </script>
 
-<h1>Jogo das Formas</h1>
+  <h1>Jogo das Formas</h1>
   <p>Arraste a forma até o nome correspondente!</p>
 
   <div class="shapes">
@@ -326,30 +348,41 @@
     <div class="target" data-name="triângulo">Triângulo</div>
   </div>
 
-  <div id="message"></div>
-
+  <p id="message"></p>
   <script>
-    let dragging;
-
     document.querySelectorAll('.shape').forEach(shape => {
-      shape.addEventListener('dragstart', (e) => {
-        dragging = e.target.id;
-      });
+      shape.addEventListener('dragstart', dragStart);
     });
 
     document.querySelectorAll('.target').forEach(target => {
-      target.addEventListener('dragover', (e) => e.preventDefault());
-
-      target.addEventListener('drop', (e) => {
-        if (dragging === target.dataset.name) {
-          target.classList.add('success');
-          target.innerHTML = "✅ " + dragging.charAt(0).toUpperCase() + dragging.slice(1);
-          document.getElementById("message").innerHTML = "🎉 <span class='confetti'>Muito bem! Você acertou!</span>";
-        } else {
-          document.getElementById("message").innerHTML = "❌ Ops! Tente de novo!";
-        }
-      });
+      target.addEventListener('dragover', dragOver);
+      target.addEventListener('drop', drop);
     });
+
+    function dragStart(e) {
+      e.dataTransfer.setData('text', e.target.id);
+    }
+
+    function dragOver(e) {
+      e.preventDefault();
+    }
+
+    function drop(e) {
+      e.preventDefault();
+      const draggedElementId = e.dataTransfer.getData('text');
+      const target = e.target;
+      const targetName = target.getAttribute('data-name');
+
+      if (draggedElementId === targetName) {
+        target.classList.add('success');
+        document.getElementById('message').textContent = "Você acertou!";
+        document.getElementById('message').classList.add('confetti');
+      } else {
+        target.classList.remove('success');
+        document.getElementById('message').textContent = "Tente novamente!";
+        document.getElementById('message').classList.remove('confetti');
+      }
+    }
   </script>
 </body>
 </html>
