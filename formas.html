@@ -170,6 +170,84 @@
     .footer-logo {
       height: 50px;
     }
+
+
+    h1 {
+      color: #333;
+    }
+
+    .shapes, .targets {
+      display: flex;
+      justify-content: center;
+      margin: 30px 0;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .shape, .target {
+      width: 100px;
+      height: 100px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.2s;
+    }
+
+    .shape:hover {
+      transform: scale(1.1);
+    }
+
+    .circle { background: #FF6B6B; border-radius: 50%; }
+    .square { background: #6BCB77; }
+    .rectangle {
+      background: #FFD93D;
+      width: 120px;
+      height: 80px;
+      border-radius: 10px;
+    }
+    .triangle {
+      width: 0;
+      height: 0;
+      border-left: 50px solid transparent;
+      border-right: 50px solid transparent;
+      border-bottom: 100px solid #4D96FF;
+      background: none;
+    }
+
+    .target {
+      background: #ffffff;
+      border: 2px solid #ccc; /* Borda sólida suave */
+      color: #555;
+      width: 120px;
+      height: 100px;
+      transition: background-color 0.3s;
+    }
+
+    .success {
+      background-color: #d4edda !important;
+      border: 2px solid #28a745 !important;
+      color: #155724;
+    }
+
+    #message {
+      font-size: 1.2em;
+      margin-top: 20px;
+      color: #2d6a4f;
+    }
+
+    .confetti {
+      font-size: 2em;
+      animation: pop 0.3s ease-in-out infinite alternate;
+    }
+
+    @keyframes pop {
+      from { transform: scale(1); }
+      to { transform: scale(1.2); }
+    }
   </style>
 </head>
 <body>
@@ -229,6 +307,49 @@
       msg.lang = "pt-BR";
       window.speechSynthesis.speak(msg);
     }
+  </script>
+
+<h1>Jogo das Formas</h1>
+  <p>Arraste a forma até o nome correspondente!</p>
+
+  <div class="shapes">
+    <div class="shape circle" draggable="true" id="círculo"></div>
+    <div class="shape square" draggable="true" id="quadrado"></div>
+    <div class="shape rectangle" draggable="true" id="retângulo"></div>
+    <div class="shape triangle" draggable="true" id="triângulo"></div>
+  </div>
+
+  <div class="targets">
+    <div class="target" data-name="círculo">Círculo</div>
+    <div class="target" data-name="quadrado">Quadrado</div>
+    <div class="target" data-name="retângulo">Retângulo</div>
+    <div class="target" data-name="triângulo">Triângulo</div>
+  </div>
+
+  <div id="message"></div>
+
+  <script>
+    let dragging;
+
+    document.querySelectorAll('.shape').forEach(shape => {
+      shape.addEventListener('dragstart', (e) => {
+        dragging = e.target.id;
+      });
+    });
+
+    document.querySelectorAll('.target').forEach(target => {
+      target.addEventListener('dragover', (e) => e.preventDefault());
+
+      target.addEventListener('drop', (e) => {
+        if (dragging === target.dataset.name) {
+          target.classList.add('success');
+          target.innerHTML = "✅ " + dragging.charAt(0).toUpperCase() + dragging.slice(1);
+          document.getElementById("message").innerHTML = "🎉 <span class='confetti'>Muito bem! Você acertou!</span>";
+        } else {
+          document.getElementById("message").innerHTML = "❌ Ops! Tente de novo!";
+        }
+      });
+    });
   </script>
 </body>
 </html>
