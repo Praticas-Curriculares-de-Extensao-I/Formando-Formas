@@ -266,6 +266,26 @@
     </div>
   </main>
 
+<main>
+    <div class="card">
+      <h3>🧩 Quebra-Cabeça das Formas</h3>
+      <p>Arraste as formas para os seus lugares!</p>
+      <div id="puzzle-area" class="drag-container">
+        <div id="slot-circle" class="silhouette" ondrop="dropPuzzle(event)" ondragover="allowDrop(event)"></div>
+        <div id="slot-square" class="silhouette" ondrop="dropPuzzle(event)" ondragover="allowDrop(event)"></div>
+        <div id="slot-triangle" class="silhouette" ondrop="dropPuzzle(event)" ondragover="allowDrop(event)"></div>
+        <div id="slot-rectangle" class="silhouette" ondrop="dropPuzzle(event)" ondragover="allowDrop(event)"></div>
+      </div>
+      <div class="drag-container">
+        <div id="puzzle-circle" class="shape circle puzzle-piece draggable" draggable="true" ondragstart="drag(event)" style="width: 80px; height: 80px;"></div>
+        <div id="puzzle-square" class="shape square puzzle-piece draggable" draggable="true" ondragstart="drag(event)" style="width: 80px; height: 80px;"></div>
+        <div id="puzzle-triangle" class="triangle puzzle-piece draggable" draggable="true" ondragstart="drag(event)"></div>
+        <div id="puzzle-rectangle" class="shape rectangle puzzle-piece draggable" draggable="true" ondragstart="drag(event)" style="width: 120px; height: 50px;"></div>
+      </div>
+      <div id="puzzle-feedback"></div>
+    </div>
+  </main>
+
   <footer>
     <div class="footer-content">
       <img src="logo.png" alt="Logo do IFPE" class="footer-logo">
@@ -294,6 +314,43 @@
       } else {
         feedback.innerHTML = 'Ops! Tente novamente. 😊';
         feedback.style.color = 'red';
+      }
+    }
+
+<audio id="success-sound" src="success.mp3" preload="auto"></audio>
+
+  <script>
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function dropPuzzle(ev) {
+      ev.preventDefault();
+      const data = ev.dataTransfer.getData("text");
+      const dragged = document.getElementById(data);
+      const target = ev.target;
+
+      if (!target.hasChildNodes()) {
+        target.appendChild(dragged);
+        checkPuzzleComplete();
+      }
+    }
+
+    function checkPuzzleComplete() {
+      const c = document.getElementById("slot-circle").firstChild?.id === "puzzle-circle";
+      const s = document.getElementById("slot-square").firstChild?.id === "puzzle-square";
+      const t = document.getElementById("slot-triangle").firstChild?.id === "puzzle-triangle";
+      const r = document.getElementById("slot-rectangle").firstChild?.id === "puzzle-rectangle";
+
+      if (c && s && t && r) {
+        document.getElementById("puzzle-feedback").innerHTML = '<div class="celebrate-banner">🎉 Você mandou bem demais! 🎉</div>';
+        document.body.style.transition = "background 0.5s";
+        document.body.style.background = "#fffacd";
+        document.getElementById('success-sound').play();
       }
     }
   </script>
