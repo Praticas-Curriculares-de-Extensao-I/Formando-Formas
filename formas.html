@@ -265,6 +265,21 @@
       from { transform: scale(1); }
       to { transform: scale(1.2); }
     }
+
+    .game-title {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .game-title h1 {
+      font-size: 2em;
+      color: #4b0082;
+    }
+
+    .game-title p {
+      font-size: 1.2em;
+      color: #333;
+    }
   </style>
 </head>
 <body>
@@ -311,28 +326,10 @@
     </div>
   </div>
 
-  <footer>
-    <div class="footer-content">
-      <div class="footer-logo-container">
-        <img src="logo.png" alt="Logo do IFPE" class="footer-logo">
-      </div>
-      <div class="footer-text">
-        <p>Projeto da disciplina de Práticas Curriculares de Extensão l</p>
-        <p>&copy; 2025 Formando Formas</p>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    function falar(texto) {
-      const msg = new SpeechSynthesisUtterance(texto);
-      msg.lang = "pt-BR";
-      window.speechSynthesis.speak(msg);
-    }
-  </script>
-
-  <h1>Jogo das Formas</h1>
-  <p>Arraste a forma até o nome correspondente!</p>
+  <div class="game-title">
+    <h1>Jogo das Formas</h1>
+    <p>Arraste a forma até o nome correspondente!</p>
+  </div>
 
   <div class="shapes">
     <div class="shape circle" draggable="true" id="círculo"></div>
@@ -349,7 +346,14 @@
   </div>
 
   <p id="message"></p>
+
   <script>
+    function falar(texto) {
+      const msg = new SpeechSynthesisUtterance(texto);
+      msg.lang = "pt-BR";
+      window.speechSynthesis.speak(msg);
+    }
+
     document.querySelectorAll('.shape').forEach(shape => {
       shape.addEventListener('dragstart', dragStart);
     });
@@ -383,8 +387,9 @@
         document.getElementById('message').classList.remove('confetti');
       }
     }
+  </script>
 
- <footer>
+  <footer>
     <div class="footer-content">
       <div class="footer-logo-container">
         <img src="logo.png" alt="Logo do IFPE" class="footer-logo">
@@ -395,6 +400,5 @@
       </div>
     </div>
   </footer>
-  </script>
 </body>
 </html>
